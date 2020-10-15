@@ -4,10 +4,8 @@ import json
 import requests
 import os
 import argparse
-
 api_key = "18bb80696ecc77ff0ebaf2056f075aad"
 prefix_url = "https://fmpcloud.io/api/v3"
-
 
 def str2bool(v):
     if isinstance(v, bool):
