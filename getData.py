@@ -98,7 +98,7 @@ def create_separated_files(symbol, querytype):
             i += 1
 
 
-def get_conpanies(args):
+def get_companies(args):
     with open(args.companies_file, 'r') as companies:
         for symbol in companies:
             if len(symbol) > 0:
@@ -113,7 +113,7 @@ def get_conpanies(args):
 
 def main():
     args = parse_arguments()
-    get_conpanies(args)
+    get_companies(args)
 
 
 def parse_arguments():
