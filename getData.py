@@ -36,6 +36,8 @@ def get_results(symbol, urls):
 def get_url_data(symbol, name, url):
     filename = os.path.join('raw', symbol + '_' + name + '.json')
     print(filename)
+    if not os.path.exists('raw'):
+        os.makedirs('raw')
     with open(filename, 'w') as file:
         response = requests.get(url)
         if response.status_code == 200:
