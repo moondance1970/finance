@@ -21,9 +21,9 @@ def str2bool(v):
 
 
 def get_urls(symbol):
-    income_url = prefix_url + '/income-statement/' + symbol + '?period=quarter'
+    income_url = prefix_url + '/income-statement/' + symbol + '?limit=120'
     income_url += '&apikey=' + api_key
-    historic_url = prefix_url + '/historical-price-full/' + symbol + '?period=quarter'
+    historic_url = prefix_url + '/historical-price-full/' + symbol + '?serietype=line'
     historic_url += '&apikey=' + api_key
     return [income_url, historic_url]
 
@@ -49,20 +49,22 @@ def get_url_data(symbol, name, url):
 
 def create_score(symbol):
     try:
+        if not os.path.exists('scores'):
+            os.makedirs('scores')
         filename = os.path.join('seperated', symbol, 'historical1.json')
         with open(filename) as current:
             filename = os.path.join('seperated', symbol, 'historical30.json')
             with open(filename) as old:
                 data_current = json.load(current)
                 data_old = json.load(old)
-                score = data_current['high'] - data_old['high']
-                filename = os.path.join('seperated', symbol, 'score.json')
+                score = data_current['close'] - data_old['close']
+                filename = os.path.join('scores', symbol+'_score.json')
                 with open(filename, 'w') as score_file:
                     data = {}
                     data['score'] = score
-                    data['old'] = data_old['high']
-                    data['current'] = data_current['high']
-                    data['percentage'] = (((data_current['high'] - data['old']) /  data_current['high']) * 100)
+                    data['old'] = data_old['close']
+                    data['current'] = data_current['close']
+                    data['percentage'] = (((data_current['close'] - data['old']) /  data_current['close']) * 100)
                     json.dump(data, score_file)
     except:
         pass
