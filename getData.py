@@ -4,6 +4,8 @@ import json
 import requests
 import os
 import argparse
+from datetime import datetime, date
+
 api_key = "18bb80696ecc77ff0ebaf2056f075aad"
 prefix_url = "https://fmpcloud.io/api/v3"
 
@@ -92,6 +94,14 @@ def create_separated_files(symbol, querytype):
         if querytype in data_list:
             data_list = data_list[querytype]
         for data in data_list:
+            days_from_now = datetime.strptime(data['date'], '%Y-%m-%d')
+            days_diff = datetime.today() - days_from_now
+            data['date'] = days_diff.days
+            data.pop('label', None)
+
+
+
+            today = date.today()
             filename_to_write = os.path.join('seperated', symbol, querytype + str(i) + '.json')
             with open(filename_to_write, 'w') as file_to_write:
                 json.dump(data, file_to_write)
@@ -122,6 +132,12 @@ def parse_arguments():
                         help="the companies you want to download info for", required=True)
     parser.add_argument("--fetchmode", type=str2bool, nargs='?', const=True, default=False,
                         help="fetch data / analyze data")
+    # parser.add_argument("--history_window_for_engine_input",
+    #                    type=int,  const=True, default=365,
+    #                     help="amount of history in days that the engine gets")
+    # parser.add_argument("--history_window_for_engine_testing", type=int, const=True,
+    #                     default=90, help="amount of history in days that the engine gets")
+
     return parser.parse_args()
 
 
