@@ -124,7 +124,6 @@ def get_companies(args):
                 else:
                     analyze_results(symbol)
 
-
 def main():
     args = parse_arguments()
     get_companies(args)
